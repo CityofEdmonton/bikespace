@@ -1,3 +1,5 @@
+awscli==1.14.48
+awsebcli==3.12.3
 blessed==1.14.2
 boto3==1.4.8
 botocore==1.8.38
@@ -10,6 +12,7 @@ coverage==4.5.1
 decorator==4.1.2
 dj-database-url==0.4.1
 Django==1.11.1
+django-cors-headers==2.4.0
 django-split-settings==0.2.5
 django-storages==1.6.6
 djangorestframework==3.6.4

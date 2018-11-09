@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'bicycleparking',
     'storages',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'Bicycle_parking.urls'
@@ -132,3 +134,5 @@ REST_FRAMEWORK = {
         'user': '1000/day'
     }
 }
+
+CORS_ORIGIN_REGEX_WHITELIST = (r'^(https?://)?(\w+\.)?s3.amazonaws\.com$', )
