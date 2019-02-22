@@ -93,3 +93,6 @@ bicycleparking/static/dist/*
 
 # but don't ignore the folder
 !/bicycleparking/static/dist/.keep
+bicycleparking/templates/bicycleparking/index.html
+bicycleparking/templates/bicycleparking/manifest.json
+bicycleparking/templates/bicycleparking/sw.js
