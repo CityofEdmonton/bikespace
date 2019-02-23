@@ -4,7 +4,7 @@ import os.path
 from django.conf import settings
 
 
-class S3Uploader:
+class S3Uploader():
     """This class is used for upload picture to S3"""
 
     def __init__(self):
