@@ -48,7 +48,7 @@ from bicycleparking.models import Picture
 from bicycleparking.models import BetaComments
 from bicycleparking.models import Approval
 from bicycleparking.models import Event
-from bicycleparking.photos.uploader import Uploader
+from bicycleparking.photos.s3-uploader import S3Uploader
 from bicycleparking.geocode import Geocode
 from bicycleparking.LocationData import LocationData
 from bicycleparking.CollectedData import CollectedData
@@ -147,7 +147,7 @@ class LocationNameRequest (APIView) :
         return JsonResponse (data.getIntersectionNames ())
            
 class DownloadPicture(APIView):
-    uploader = Uploader()
+    uploader = S3Uploader()
 
     def get(self, request, filename, format=None):
         if filename:
@@ -161,7 +161,7 @@ class DownloadPicture(APIView):
 
 class UploadPicture(APIView):
     renderer_classes = (JSONRenderer, )
-    uploader = Uploader()
+    uploader = S3Uploader()
 
     def post(self, request, filename, format=None):
         file_obj = self.request.data['picture']
