@@ -72,8 +72,9 @@ class SurveyAnswerList(generics.ListCreateAPIView):
         answer using the serializer, the aggregate geographic data (Geocode)
         and event record using the geocode class, and the picture record."""
         answer = serializer.save()
-        pic = Picture (answer = answer, photo_uri = self.request.data ['photo_uri'])
-        pic.save ()
+        if 'photo_uri' in serializer.validated_data:
+            pic = Picture (answer = answer, photo_uri = self.request.data ['photo_uri'])
+            pic.save ()
         geocode = Geocode(answer, ipAddress=self.request.META['REMOTE_ADDR'])
         geocode.output()         
 
