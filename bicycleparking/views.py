@@ -48,7 +48,7 @@ from bicycleparking.models import Picture
 from bicycleparking.models import BetaComments
 from bicycleparking.models import Approval
 from bicycleparking.models import Event
-from bicycleparking.uploader import Uploader
+from bicycleparking.photos.uploader import Uploader
 from bicycleparking.geocode import Geocode
 from bicycleparking.LocationData import LocationData
 from bicycleparking.CollectedData import CollectedData
