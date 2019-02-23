@@ -88,9 +88,8 @@ class LocationData (object):
   def makeArea (self) :
      """Creates and returns the area definition object. Calling this method will
      create a row in the Area table in the database."""
-     return null
-   #   return Area.objects.create (closest = self.closest.gid, 
-                                 # major = self.getMajor ().gid)
+     return Area.objects.create (closest = self.closest.gid, 
+                                 major = self.getMajor ().gid)
 
   def getIntersectionData (self) :
      """Prepares the request to the geocode database of intersections;
