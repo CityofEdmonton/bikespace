@@ -14,26 +14,19 @@
 import requests
 import datetime
 import django.utils as utils
-from bicycleparking.models import Event, Area, SurveyAnswer, Intersection2d, Approval
+from django.db import connections
+from bicycleparking.models import Event, Area, SurveyAnswer, Edmonton_Raw, Approval
 
 class LocationData (object):
   """Encapsulates methods for accessing the geographical databases and 
-  determining the closest of some type of intersection: any or major."""
+  determining the closest intersection."""
 
-  latLimits = (43.58149, 43.886692)
-  longLimits = (-79.61179, -79.114705)
+  latLimits = (53.254388, 53.754388)
+  longLimits = (-113.750929, -113.250929)
   key = "*** reserved for future use"
-  majorSQL = """SELECT gid, int_id, intersec5, classifi6, classifi7, 
-                       longitude, latitude, objectid, geom,
-                       geom <-> st_setsrid(st_makepoint(%(long)s,%(lat)s),4326) as distance
-                FROM intersection2d
-                WHERE classifi6 = 'MJRSL' or classifi6 = 'MJRML'
-                ORDER BY distance
-                LIMIT 1;"""
-  closestSQL = """SELECT gid, int_id, intersec5, classifi6, classifi7, 
-                         longitude, latitude, objectid, geom,
-                         geom <-> st_setsrid(st_makepoint(%(long)s,%(lat)s),4326) as distance
-                  FROM intersection2d
+  closestSQL = """SELECT gid, id, endpoint_id, on_street_name_full_parent, at_street_name_full_parent, on_street_name_full, at_street_name_full, latitude, longitude, the_geom,
+                         the_geom <-> st_setsrid(st_makepoint(%(long)s,%(lat)s),4326) as distance
+                  FROM edmonton_raw
                   ORDER BY distance 
                   LIMIT 1;"""
 
@@ -41,8 +34,8 @@ class LocationData (object):
      """Defines the local variables: only latitude and longitude are parameters."""
      self.latitude = latitude
      self.longitude = longitude
-     self.closest = self.getIntersectionData ()
      self.errors = []
+     self.closest = self.getIntersectionData ()
 
   def update (self, data) :
      """Updates the location data: provided for compatability with the
@@ -58,13 +51,13 @@ class LocationData (object):
      return self.closest != None
 
   def getIntersectionNames (self) :
-     """Derive a map with the names of the closest major and minor
+     """Derive a map with the names of the closest minor
      intersections."""
      self.getIntersectionData ()
      result = {}
      if self.closest != None :
-        result ['closest']  = self.closest.intersec5 
-        result ['major'] = self.getMajor ().intersec5
+        result ['major']  = self.getMajor().on_street_name_full
+        result ['closest']  = self.closest.on_street_name_full
      return result
 
   def getDistance (self) :
@@ -95,8 +88,9 @@ class LocationData (object):
   def makeArea (self) :
      """Creates and returns the area definition object. Calling this method will
      create a row in the Area table in the database."""
-     return Area.objects.create (closest = self.closest.gid, 
-                                 major = self.getMajor ().gid)
+     return null
+   #   return Area.objects.create (closest = self.closest.gid, 
+                                 # major = self.getMajor ().gid)
 
   def getIntersectionData (self) :
      """Prepares the request to the geocode database of intersections;
@@ -128,12 +122,7 @@ class LocationData (object):
       intersection to the current intersection and returns the resulting identifier. 
       This method assumes a valid location input parameter; if the caller passes in 
       an invalid location, the method will throw."""
-
-      if self.closest.classifi6 == 'MJRSL' or self.closest.classifi6 == 'MJRML' :
-         return self.closest
-      else :
-         return self.lookupIntersection (LocationData.majorSQL, 
-                                         self.closest.latitude, self.closest.longitude)
+      return self.closest
     
   def lookupIntersection (self, sql, latt, longt) :
       """Translates the selected data into a django data database request."""
@@ -141,5 +130,5 @@ class LocationData (object):
       location = {}
       location ['lat'] = float (latt)
       location ['long'] = float (longt)
-      query = Intersection2d.objects.raw (sql, location)
+      query = Edmonton_Raw.objects.raw (sql, location)
       return query [0]

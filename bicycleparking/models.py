@@ -147,6 +147,42 @@ class Intersection2d (models.Model):
      managed = False
      db_table = 'intersection2d'
 
+class Edmonton_Raw(models.Model):
+  """Raw intersections table
+     Tables in the geospatial database as defined in the settings
+     for this project are not managed by django: they are loaded
+     from data supplied by the city of Edmonton. The following model
+     definitions are obtained from introspecting the existing database
+     tables created by importing a csv file. The application will
+     access these values but never write to them."""
+
+  gid = models.AutoField(primary_key=True)
+  id = models.BigIntegerField(blank=True, null=True)
+  endpoint_id = models.BigIntegerField(blank=True, null=True)
+  # On Street Name Full Parent
+  on_street_name_full_parent = models.CharField(max_length=250, blank=True, null=True)
+  # At Street Name Full Parent
+  at_street_name_full_parent = models.CharField(max_length=250, blank=True, null=True)
+  # On Street Name Full
+  on_street_name_full = models.CharField(max_length=250, blank=True, null=True)
+  # At Street Name Full
+  at_street_name_full = models.CharField(max_length=250, blank=True, null=True)
+  # Latitude
+  latitude = models.FloatField(blank=True, null=True)
+  # Longitude
+  longitude = models.FloatField(blank=True, null=True)
+  # Location
+  location = models.CharField(max_length=250, blank=True, null=True)
+
+  # The 'geom' field contains a hex string with location data and the application will 
+  # never access it directly
+  the_geom = models.TextField(blank=True, null=True)  
+
+  class Meta:
+     managed = False
+     db_table = 'edmonton_raw'
+
+
 class CentrelineIntersectionWgs84(models.Model):
   """Intersection definition table
      Tables in the geospatial database as defined in the settings

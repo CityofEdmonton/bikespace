@@ -26,14 +26,12 @@ class GeoSpatialRouting :
   and longitude coordinates."""
 
   # models supported by the geospatial database
-  includedModels = set (['centrelineintersectionwgs84', 'spatialrefsys',
-                         'intersection2d'])
+  includedModels = set (['centrelineintersectionwgs84', 'spatialrefsys', 'intersection2d', 'edmonton_raw'])
 
   def db_for_read (self, model, **hints):
      """Selects the database to read from: if the caller accesses the
      intersections table model, the request is routed to the geospatial
      database, otherwise it is ignored."""
-
      result = None
      if model._meta.model_name in GeoSpatialRouting.includedModels :
          result = 'geospatial'
@@ -43,7 +41,6 @@ class GeoSpatialRouting :
      """Selects the database to write to: since the app should never
      actually write to the geospatial database this is included only
      for completeness."""
-
      result = None
      if model._meta.model_name in GeoSpatialRouting.includedModels :
          result = 'geospatial'
@@ -61,14 +58,13 @@ class GeoSpatialRouting :
              obj2._meta.model_name in GeoSpatialRouting.includedModels) :
          result = None
      return result
-    
-  def allow_syncdb(self, db, model):
-     """Do not synchronize the geospatial reference database."""
 
+  def allow_migrate(self, db, app_label, model_name=None, **hints):
      result = None
-     if model._meta.model_name in GeoSpatialRouting.includedModels :
-        result = False
+     if model_name in GeoSpatialRouting.includedModels :
+        result = True
      return result
+
 
 class DefaultRouting :
   """Routes requests to the django database interface to the geospatial
