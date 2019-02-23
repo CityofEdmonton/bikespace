@@ -7,3 +7,15 @@ services:
             dockerfile: Dockerfile
         ports:
             - 5435:5432
+    web:
+        build: .
+        command: python manage.py runserver 0.0.0.0:8000
+        volumes:
+            - .:/code
+        ports:
+            - "8000:8000"
+        depends_on:
+            - db
+        environment: 
+            - BIKE_DB_HOST=db
+            - GOOGLE_APPLICATION_CREDENTIALS=/code/service-account.json
