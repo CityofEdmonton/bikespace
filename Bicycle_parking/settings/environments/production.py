@@ -21,6 +21,9 @@ AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=3000',
 }
 
+GCP_BUCKET = os.environ.get('GCP_BUCKET')
+GOOGLE_APPLICATION_CREDENTIALS = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
+
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 

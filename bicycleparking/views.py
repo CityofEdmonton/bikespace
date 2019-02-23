@@ -48,7 +48,7 @@ from bicycleparking.models import Picture
 from bicycleparking.models import BetaComments
 from bicycleparking.models import Approval
 from bicycleparking.models import Event
-from bicycleparking.photos.s3uploader import S3Uploader
+from bicycleparking.photos.gcpuploader import GCPUploader
 from bicycleparking.geocode import Geocode
 from bicycleparking.LocationData import LocationData
 from bicycleparking.CollectedData import CollectedData
@@ -147,7 +147,7 @@ class LocationNameRequest (APIView) :
         return JsonResponse (data.getIntersectionNames ())
            
 class DownloadPicture(APIView):
-    uploader = S3Uploader()
+    uploader = GCPUploader()
 
     def get(self, request, filename, format=None):
         if filename:
@@ -161,7 +161,7 @@ class DownloadPicture(APIView):
 
 class UploadPicture(APIView):
     renderer_classes = (JSONRenderer, )
-    uploader = S3Uploader()
+    uploader = GCPUploader()
 
     def post(self, request, filename, format=None):
         file_obj = self.request.data['picture']
@@ -173,9 +173,10 @@ class UploadPicture(APIView):
         file = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
         print ("upload source address = {0}".format (ipAddress))
 
-        if ipAddress != "127.0.0.1" :
+        try:
            content = {'s3_name': self.uploader.write(filename, file)}
-        else :
+        except:
+            print('Picture upload failed. Are the credentials accurate?')
             content = { 's3_name' : 'test/picture'}
         return Response(content)
 
