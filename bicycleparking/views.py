@@ -153,7 +153,7 @@ class DownloadPicture(APIView):
         if filename:
             try:
                ctype = "image/" + os.path.splitext(filename)[1]
-               return HttpResponse(self.uploader.fromS3 (filename), content_type=ctype)
+               return HttpResponse(self.uploader.read (filename), content_type=ctype)
             except:
                 return HttpResponse(status=500)
         else:
@@ -174,7 +174,7 @@ class UploadPicture(APIView):
         print ("upload source address = {0}".format (ipAddress))
 
         if ipAddress != "127.0.0.1" :
-           content = {'s3_name': self.uploader.toS3(filename, file)}
+           content = {'s3_name': self.uploader.write(filename, file)}
         else :
             content = { 's3_name' : 'test/picture'}
         return Response(content)
