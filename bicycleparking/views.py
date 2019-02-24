@@ -69,12 +69,8 @@ class SurveyAnswerList(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         """Executes the HTTP POST request by creating four objects: the survey
-        answer using the serializer, the aggregate geographic data (Geocode)
-        and event record using the geocode class, and the picture record."""
+        answer using the serializer and the aggregate geographic data (Geocode)."""
         answer = serializer.save()
-        if 'photo_uri' in serializer.validated_data:
-            pic = Picture (answer = answer, photo_uri = self.request.data ['photo_uri'])
-            pic.save ()
         geocode = Geocode(answer, ipAddress=self.request.META['REMOTE_ADDR'])
         geocode.output()         
 
@@ -173,13 +169,16 @@ class UploadPicture(APIView):
 
         file = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
         print ("upload source address = {0}".format (ipAddress))
-
+        uri = 'test/picture'
         try:
-           content = {'s3_name': self.uploader.write(filename, file)}
+           uri = self.uploader.write(filename, file)
         except:
             print('Picture upload failed. Are the credentials accurate?')
-            content = { 's3_name' : 'test/picture'}
-        return Response(content)
+        
+        pic = Picture (photo_uri = uri)
+        pic.save ()
+
+        return Response({ 's3_name' : uri})
 
 def submissions_to_moderate(request):
     

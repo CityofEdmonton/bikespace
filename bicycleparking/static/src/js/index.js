@@ -67,9 +67,8 @@ class Index {
         body: JSON.stringify({ 'picture': state.picture }),
       }).then(response => {
         response.json().then(json => {
-          body.photo_uri = json.s3_name;
           if (body.survey && body.survey.picture) {
-            delete body.survey.picture
+            body.survey.picture = json.s3_name
           }
           fetch(`${document.location.origin}/api/survey`, {
             method: 'POST',
