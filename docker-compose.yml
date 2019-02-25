@@ -2,12 +2,14 @@ version: '3.6'
 
 services:
     db:
+        image: cityofedmonton/bikespace-db
         build:
             context: ./db
             dockerfile: Dockerfile
         ports:
-            - 5435:5432
+            - 5432:5432
     web:
+        image: cityofedmonton/bikespace-web
         build: .
         volumes:
             - .:/code
