@@ -1,8 +1,4 @@
-# comment
-*/temp*
-*/*/temp*
-temp?
-
 env
 venv
-db
+
+service-account.json
