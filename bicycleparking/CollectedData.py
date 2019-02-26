@@ -63,7 +63,6 @@ class CollectedData (object):
       location = LocationData(answer.latitude, answer.longitude).getIntersectionNames()
       result['intersection'] = location['closest']
       result['majorIntersection'] = location['major']
-      # result = self.getNames (event.area)
       survey = answer.survey
       for field in fromSurvey :
           try :
