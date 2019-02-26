@@ -15,9 +15,9 @@ class Pictures(admin.ModelAdmin):
 
     def get_queryset(self, request):
         """Only show unapproved pictures"""
-        approved_event_ids = Approval.objects.all().values('approved__answer__id')
-        unapproved_surveys = SurveyAnswer.objects.exclude(id__in=approved_event_ids).values('picture')
-        unapproved_pictures = Picture.objects.filter(id__in=unapproved_surveys)
+        approved_picture_ids = Approval.objects.all().values('approved__answer__picture__id')
+        pictures_in_surveys = SurveyAnswer.objects.all().values('picture__id')
+        unapproved_pictures = Picture.objects.filter(id__in=pictures_in_surveys).exclude(id__in=approved_picture_ids)
         return unapproved_pictures
 
     def get_urls(self):

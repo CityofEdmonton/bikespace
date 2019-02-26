@@ -43,21 +43,20 @@ class CollectedData (object):
      """Gets the list of approved items from the request database""" 
 
      result = []
-     list = Approval.objects.filter (status__exact = 'OK');
+     approved_photos_ids = Approval.objects.all().values('approved__answer__picture__id')
+     list = SurveyAnswer.objects.filter(picture__in=approved_photos_ids)
 
-     for entry in list :
-         if self.bounded (entry.approved.answer) :
-           result.append (self.accessItem (entry.approved))
+     for survey in list :
+         if self.bounded (survey) :
+           result.append (self.accessItem (survey))
      return result
 
-  def accessItem (self, event) :
+  def accessItem (self, answer) :
       """Takes the specifications for each individual item and constructs a single
       description object."""
-
-      answer = event.answer
-
       fromSurvey = [ { 'id' : 'duration', 'path' : ['happening', 0, 'time'] },
-                     { 'id' : 'problem', "path" : ['problem_type']} ]
+                     { 'id' : 'problem', 'path' : ['problem_type'] },
+                     { 'id' : 'time', 'path' : ['happening', 0, 'date'] } ]
 
       result = {}
       location = LocationData(answer.latitude, answer.longitude).getIntersectionNames()
@@ -75,8 +74,7 @@ class CollectedData (object):
       result ['longitude'] = answer.longitude    
       result ['latitude'] = answer.latitude
       result ['comments'] = answer.comments
-      result ['time'] = str(event.timeOf)
-      result ['id'] = event.id
+      result ['id'] = answer.id
       return result
 
   def fromSurvey (self, base, indices) :
