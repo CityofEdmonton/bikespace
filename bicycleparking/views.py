@@ -110,6 +110,12 @@ class DashboardRequest (APIView) :
            param = {}
         return self.access (param)
 
+    def get (self, request) :
+        """
+        Attempts to get all of the data for Edmonton. Similar to the
+        POST method, but it doesn't include additional parameters."""
+        return self.access ({})
+
     def access (self, param) :
         """Provides access to the database for both POST and GET requests."""
         # print(param)
