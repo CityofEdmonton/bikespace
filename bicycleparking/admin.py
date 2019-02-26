@@ -15,8 +15,9 @@ class Pictures(admin.ModelAdmin):
 
     def get_queryset(self, request):
         """Only show unapproved pictures"""
-        approved_event_ids = Approval.objects.values_list('approved')
-        unapproved_pictures = Picture.objects.exclude(answer_id__in=approved_event_ids)
+        approved_event_ids = Approval.objects.all().values('approved__answer__id')
+        unapproved_surveys = SurveyAnswer.objects.exclude(id__in=approved_event_ids).values('picture')
+        unapproved_pictures = Picture.objects.filter(id__in=unapproved_surveys)
         return unapproved_pictures
 
     def get_urls(self):
@@ -32,9 +33,14 @@ class Pictures(admin.ModelAdmin):
 
     def picture_approve(self, request, picture_id):
         picture = Picture.objects.get(id=picture_id)
-        surveyanswer = picture.answer
-        event = Event.objects.get(answer=surveyanswer)
-        Approval.objects.get_or_create(approved=event)
+        try:
+            responses = SurveyAnswer.objects.filter(picture_id=picture_id)
+        except SurveyAnswer.DoesNotExist:
+            responses = []
+        
+        for surveyanswer in responses:
+            event = Event.objects.get(answer=surveyanswer)
+            Approval.objects.get_or_create(approved=event)
         return HttpResponseRedirect(reverse('admin:bicycleparking_picture_changelist'))
 
     def image_tag(self, obj):
