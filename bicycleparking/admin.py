@@ -39,7 +39,7 @@ class Pictures(admin.ModelAdmin):
 
     def image_tag(self, obj):
         return format_html(
-            '<a href="https://s3.amazonaws.com/bikeparking/{}"><img src="https://s3.amazonaws.com/bikeparking/{}" style="max-width: 400px; max-height: 400px"/></a>'.format(
+            '<a href="https://storage.cloud.google.com/bikespace-yeg-photos/{}"><img src="https://storage.cloud.google.com/bikespace-yeg-photos/{}" style="max-width: 400px; max-height: 400px"/></a>'.format(
                 obj.photo_uri, obj.photo_uri))
 
     def approve(self, obj):
