@@ -178,7 +178,7 @@ class UploadPicture(APIView):
         pic = Picture (photo_uri = uri)
         pic.save ()
 
-        return Response({ 's3_name' : uri})
+        return Response({ 's3_name' : uri, 'id': pic.id})
 
 def submissions_to_moderate(request):
     

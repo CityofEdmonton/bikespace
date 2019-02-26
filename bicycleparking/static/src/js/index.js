@@ -69,6 +69,7 @@ class Index {
         response.json().then(json => {
           if (body.survey && body.survey.picture) {
             body.survey.picture = json.s3_name
+            body.picture = json.id
           }
           fetch(`${document.location.origin}/api/survey`, {
             method: 'POST',
