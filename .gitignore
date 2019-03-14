@@ -96,3 +96,4 @@ bicycleparking/templates/bicycleparking/index.html
 bicycleparking/templates/bicycleparking/manifest.json
 bicycleparking/templates/bicycleparking/sw.js
 bicycleparking/static/bundle.js
+service-account.json
