@@ -6,6 +6,12 @@ AWS_ACCESS_KEY_ID = ''
 AWS_SECRET_ACCESS_KEY = ''
 S3_BUCKET = ''
 
+GCP_BUCKET = 'bikespace-yeg-photos'
+if not os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'):
+    print('Setting default service account.')
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'service-account.json'
+GOOGLE_APPLICATION_CREDENTIALS = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
+
 AWS_STORAGE_BUCKET_NAME = ''
 
 DISABLE_COLLECTSTATIC = True
@@ -36,7 +42,7 @@ DATABASES = {
         'USER': os.getenv('BIKE_DB_USER', 'postgres'),
         'PASSWORD': os.getenv('BIKE_DB_PW', 'postgres'),
         'HOST': os.getenv('BIKE_DB_HOST', 'localhost'),
-        'PORT': '5435',
+        'PORT': '5432',
     },
     'geospatial': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -44,7 +50,7 @@ DATABASES = {
         'USER': os.getenv('BIKE_DB_USER', 'postgres'),
         'PASSWORD': os.getenv('BIKE_DB_PW', 'postgres'),
         'HOST': os.getenv('BIKE_DB_HOST', 'localhost'),
-        'PORT': '5435',
+        'PORT': '5432',
     }
 }
 
