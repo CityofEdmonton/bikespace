@@ -61,6 +61,7 @@ choco install python --version 3.6.3
 We now will setup an environment to run the python code of
 the [BikeSpace](https://github.com/CityofEdmonton/bikespace) project setup on your computer
 
+On Mac/Linux:
 ```shell
 pip3 install virtualenv
 
@@ -76,6 +77,27 @@ virtualenv -p python3 venv
 
 # Use the "venv" you setup earlier for your python3 project buy running the activate script
 source venv/bin/activate
+
+# Install the requirements from the supplied `requirements.txt`.
+pip3 install -r requirements.txt
+```
+
+On Windows:
+```shell
+pip3 install virtualenv
+
+# get the repository of code on your machine and change to the directory
+git clone https://github.com/CityofEdmonton/bikespace --config core.autocrlf=input
+
+# change to the directory
+cd bikespace
+
+# setup a virtualenv for python3
+virtualenv -p python3 venv
+# note "venv" is now the name of the directory containing the python virtualenv
+
+# Use the "venv" you setup earlier for your python3 project buy running the activate script
+"venv/Scripts/activate"
 
 # Install the requirements from the supplied `requirements.txt`.
 pip3 install -r requirements.txt
